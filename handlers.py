@@ -65,9 +65,9 @@ async def get_photo_2(message: Message, state: FSMContext):
 
     await message.answer(f'{answer1} and {answer2}')
 
-    image_concat(f'img/content_{message.from_user.id}.jpg', path)
+    result_path = image_concat(f'img/content_{message.from_user.id}.jpg', path, message.from_user.id)
 
-    photo = {'photo': open('img/result.jpg', 'rb')}
+    photo = {'photo': open(result_path, 'rb')}
     await message.answer_photo(photo=photo['photo'])
     
     #await state.finish()
