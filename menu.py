@@ -13,9 +13,24 @@ run_menu = ReplyKeyboardMarkup(
 menu = ReplyKeyboardMarkup(
     keyboard=[
         [
-            KeyboardButton(text='Style1'),
-            KeyboardButton(text='Style2'),
-            KeyboardButton(text='Style3'),
+            KeyboardButton(text='wave'),
+            KeyboardButton(text='starry_night'),
+            KeyboardButton(text='mosaic'),
+        ],
+        [
+            KeyboardButton(text='pencil'),
+            KeyboardButton(text='mosaic_ducks'),
+            KeyboardButton(text='candy'),
+        ],
+        [
+            KeyboardButton(text='udnie'),
+            KeyboardButton(text='the_scream'),
+            KeyboardButton(text='strip'),
+        ],
+        [
+            KeyboardButton(text='seated-nude'),
+            KeyboardButton(text='frida_kahlo'),
+            KeyboardButton(text='feathers'),
         ]
     ],
     resize_keyboard=True

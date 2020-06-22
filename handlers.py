@@ -7,8 +7,9 @@ from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.types.message import ContentType
 from config import admin_id
 from menu import menu, run_menu
+from model import Net
 from run import Run
-from utils import image_concat
+from utils import *
 
 async def send_to_admin(dp):
     await bot.send_message(chat_id=admin_id, text='Bot started')
@@ -18,7 +19,7 @@ async def send_to_admin(dp):
 async def echo(message: Message):
     #await bot.send_message(chat_id=message.from_user.id, text=text)
     text = '''Добро пожаловать в Style Transfer Bot. 
-Тебе необходимо по очереди прислать мне два фото. 
+Здесь ты можешь наложить на своё фото интересный фильтр. 
 Для начала введи команду /run или нажми на соответствующую кнопку
 Поехали!'''
     await message.answer(text=text, reply_markup=run_menu)
@@ -33,42 +34,29 @@ async def enter_run(message: Message):
 
 @dp.message_handler(content_types=ContentType.PHOTO, state=Run.Img1)
 async def get_photo_1(message: Message, state: FSMContext):
-    answer = '1'
-    await state.update_data(answer1=answer)
-    await message.photo[-1].download(f'img/content_{message.from_user.id}.jpg')
-    await message.answer('А теперь я жду от тебя второе фото, которое ты хочешь использовать в качестве стиля, либо выбери из предложенных', reply_markup=menu)
+    path_content = f'img/content_{message.from_user.id}.jpg'
+    await state.update_data(path_content=path_content)
+    await message.photo[-1].download(path_content)
+    await message.answer('А теперь выбери один из предложенных стилей', reply_markup=menu)
 
     await Run.next()
 
-@dp.message_handler(content_types=ContentType.PHOTO, state=Run.Img2)
-@dp.message_handler(Text(equals=['Style1', 'Style2', 'Style3']), state=Run.Img2)
+
+@dp.message_handler(Text(equals=['wave', 'starry_night', 'mosaic', 'pencil', 'mosaic_ducks', 'candy', 'udnie', 'the_scream', 'strip', 'seated-nude', 'frida_kahlo', 'feathers']), state=Run.Img2)
 async def get_photo_2(message: Message, state: FSMContext):
     
-    answer2 = message.text
-
-    if message.text == 'Style1':
-        path = 'style/style_1.jpg'
-    elif message.text == 'Style2':
-        path = 'style/style_2.jpg'
-    elif message.text == 'Style3':
-        path = 'style/style_3.jpg'
-    elif message.text is None:
-        await message.photo[-1].download(f'img/style_{message.from_user.id}.jpg')
-        path = f'img/style_{message.from_user.id}.jpg'
-    
-    await message.answer('Спасибо! Ожидайте результат...', reply_markup=ReplyKeyboardRemove())
+    path_style = f'style/{message.text}.jpg'
 
     data = await state.get_data()
-    answer1 = data.get('answer1')
-    #await message.photo[-1].download('img/style.jpg')
-    
+    path_content = data.get('path_content')
 
-    await message.answer(f'{answer1} and {answer2}')
+    await message.answer('Спасибо! Ожидайте результат...', reply_markup=ReplyKeyboardRemove())
 
-    result_path = image_concat(f'img/content_{message.from_user.id}.jpg', path, message.from_user.id)
+    user_id = message.from_user.id
 
-    photo = {'photo': open(result_path, 'rb')}
+    output_path = transfer_style(path_content, path_style, user_id)
+
+    photo = {'photo': open(output_path, 'rb')}
     await message.answer_photo(photo=photo['photo'])
-    
-    #await state.finish()
+    await message.answer('Готово!', reply_markup=run_menu)
     await state.reset_state()
