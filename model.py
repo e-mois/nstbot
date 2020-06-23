@@ -2,6 +2,8 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+
+
 # define Gram Matrix
 class GramMatrix(nn.Module):
     def forward(self, y):
@@ -10,6 +12,8 @@ class GramMatrix(nn.Module):
         features_t = features.transpose(1, 2)
         gram = features.bmm(features_t) / (ch * h * w)
         return gram
+
+        
 # proposed Inspiration(CoMatch) Layer
 class Inspiration(nn.Module):
     """ Inspiration Layer (from MSG-Net paper)
@@ -37,8 +41,8 @@ class Inspiration(nn.Module):
         return torch.bmm(self.P.transpose(1,2).expand(X.size(0), self.C, self.C), X.view(X.size(0),X.size(1),-1)).view_as(X)
 
     def __repr__(self):
-        return self.__class__.__name__ + '(' \
-            + 'N x ' + str(self.C) + ')'
+        return self.__class__.__name__ + '(' + 'N x ' + str(self.C) + ')'
+
 # some basic layers, with reflectance padding
 class ConvLayer(torch.nn.Module):
     def __init__(self, in_channels, out_channels, kernel_size, stride):

@@ -41,7 +41,7 @@ def preprocess_batch(batch):
     batch = batch.transpose(0, 1)
     return batch
 
-def transfer_style(path_content, path_style, user_id):
+def transfer_style(path_content, path_style, style_model, user_id):
     content_image = tensor_load_rgbimage(path_content, size=700, keep_asp=True).unsqueeze(0)
     style = tensor_load_rgbimage(path_style, size=700).unsqueeze(0)    
     style = preprocess_batch(style)
@@ -53,7 +53,6 @@ def transfer_style(path_content, path_style, user_id):
         if key.endswith(('running_mean', 'running_var')):
             del model_dict[key]
 
-    style_model = Net(ngf=128)
     style_model.load_state_dict(model_dict, False)
 
     content_image = preprocess_batch(content_image)

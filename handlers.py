@@ -1,4 +1,4 @@
-from main import bot, dp
+from main import bot, dp, style_model
 
 from aiogram import types
 from aiogram.dispatcher import FSMContext
@@ -34,7 +34,7 @@ async def enter_run(message: Message):
 
 @dp.message_handler(content_types=ContentType.PHOTO, state=Run.Img1)
 async def get_photo_1(message: Message, state: FSMContext):
-    path_content = f'img/content_{message.from_user.id}.jpg'
+    path_content = f'content_{message.from_user.id}.jpg'
     await state.update_data(path_content=path_content)
     await message.photo[-1].download(path_content)
     await message.answer('А теперь выбери один из предложенных стилей', reply_markup=menu)
@@ -54,7 +54,7 @@ async def get_photo_2(message: Message, state: FSMContext):
 
     user_id = message.from_user.id
 
-    output_path = transfer_style(path_content, path_style, user_id)
+    output_path = transfer_style(path_content, path_style, style_model, user_id)
 
     photo = {'photo': open(output_path, 'rb')}
     await message.answer_photo(photo=photo['photo'])
