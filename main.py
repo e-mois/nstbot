@@ -2,7 +2,7 @@ import asyncio
 
 from aiogram import Bot, Dispatcher, executor
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
-from config import BOT_TOKEN, PROXY_URL, PROXY_AUTH
+from config import BOT_TOKEN
 from model import Net
 
 loop = asyncio.get_event_loop()
