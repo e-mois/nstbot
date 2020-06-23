@@ -42,8 +42,8 @@ def preprocess_batch(batch):
     return batch
 
 def transfer_style(path_content, path_style, style_model, user_id):
-    content_image = tensor_load_rgbimage(path_content, size=350, keep_asp=True).unsqueeze(0)
-    style = tensor_load_rgbimage(path_style, size=200).unsqueeze(0)    
+    content_image = tensor_load_rgbimage(path_content, size=300, keep_asp=True).unsqueeze(0)
+    style = tensor_load_rgbimage(path_style, size=300).unsqueeze(0)    
     style = preprocess_batch(style)
 
     model_dict = torch.load('21styles.model')
