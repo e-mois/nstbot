@@ -11,6 +11,7 @@ from model import Net
 from run import Run
 from utils import *
 from utils_slow import transfer_style_slow
+import os
 import gc
 
 async def send_to_admin(dp):
@@ -20,7 +21,7 @@ async def send_to_admin(dp):
 @dp.message_handler(commands=['start'])
 async def echo(message: Message):
     #await bot.send_message(chat_id=message.from_user.id, text=text)
-    text = '''Добро пожаловать в Style Transfer Bot. 
+    text = '''Добро пожаловать в Picasso Bot. 
 Здесь ты можешь наложить на своё фото интересный фильтр. 
 Для начала введи команду /run или нажми на соответствующую кнопку
 Поехали!'''
@@ -51,7 +52,7 @@ async def enter_run(message: Message):
 
 @dp.message_handler(content_types=ContentType.PHOTO, state=Run.Img1)
 async def get_photo_1(message: Message, state: FSMContext):
-    path_content = f'content_{message.from_user.id}.jpg'
+    path_content = f'img/content_{message.from_user.id}.jpg'
     await state.update_data(path_content=path_content)
     await message.photo[-1].download(path_content)
     await message.answer('А теперь у тебя два пути. Ты можешь выбрать один из предложенных стилей и получить готовый результат почти мгновенно, либо ты можешь загрузить свою картинку в качестве стиля, но придется подождать порядка 10 минут. Выбор за тобой!', reply_markup=menu)
@@ -68,7 +69,7 @@ async def get_photo_2(message: Message, state: FSMContext):
     user_id = message.from_user.id
 
     if message.text is None:
-        path_style = f'style_{message.from_user.id}.jpg'
+        path_style = f'img/style_{message.from_user.id}.jpg'
         await message.photo[-1].download(path_style)
         await message.answer('Спасибо! Придется немного подождать. Можешь выходить из бота и заниматься своими делами. Когда будет готово, я пришлю результат!', reply_markup=ReplyKeyboardRemove())
         output_path = transfer_style_slow(path_content, path_style, style_model_slow, user_id)
@@ -80,4 +81,8 @@ async def get_photo_2(message: Message, state: FSMContext):
     photo = {'photo': open(output_path, 'rb')}
     await message.answer_photo(photo=photo['photo'])
     await message.answer('Готово!', reply_markup=run_menu)
+    os.remove(f'img/content_{message.from_user.id}.jpg') 
+    if os.path.exists(f'img/style_{message.from_user.id}.jpg'):
+        os.remove(f'img/style_{message.from_user.id}.jpg')
+    os.remove(f'img/output_{message.from_user.id}.jpg')
     await state.reset_state()
