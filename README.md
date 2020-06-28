@@ -6,11 +6,11 @@
 1. При отправке своего фото в качестве стиля используется медленный алгоритм по статье <https://arxiv.org/abs/1508.06576>
 Леона А. Гатиса, Александра С. Эккера и Маттиаса Бетге. <https://pytorch.org/tutorials/beginner/transfer_learning_tutorial.html>
 
-<img src="pic/content.jpg" width="300"/> <img src="pic/style1.jpg" width="300"/> <img src="pic/res1.jpg" width="300"/>
+<img src="pic/content.jpg" width="200"/> <img src="pic/style1.jpg" width="200"/> <img src="pic/res1.jpg" width="200"/>
 
 2. При выборе предложенного стиля используется алгоритм на основе предобученной MSG-Net <https://github.com/zhanghang1989/PyTorch-Multi-Style-Transfer>
 
-<img src="pic/content.jpg" width="300"/> <img src="pic/style2.jpg" width="300"/> <img src="pic/res2.jpg" width="300"/>
+<img src="pic/content.jpg" width="200"/> <img src="pic/style2.jpg" width="200"/> <img src="pic/res2.jpg" width="200"/>
 
 
 Развернуть бота на локальной машине или сервере можно двумя способами:
