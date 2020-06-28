@@ -33,13 +33,14 @@ async def help(message: Message):
     text = '''Здесь всё просто!
 Нажми /start, чтобы начать работать с ботом.
 Нажми /run, чтобы сделать еще одну крутую фотографию.
-Нажми /info, чтобы узнать подробности о боте'''
+Нажми /info, чтобы узнать подробности о боте
+По всем попросам пиши в личку @eugene_mois'''
     await message.answer(text=text)
 
 @dp.message_handler(commands=['info'])
 async def info(message: Message):
     #await bot.send_message(chat_id=message.from_user.id, text=text)
-    text = '''Данный бот является демо-проектом, реализовнным в качестве проекта в школе dlschool.org'''
+    text = '''Данный бот является демо-проектом, реализовнным в качестве проекта в школе dlschool.org. По всем попросам пиши в личку @eugene_mois'''
     await message.answer(text=text, reply_markup=run_menu)
 
 @dp.message_handler(Command('run'), state=None)
